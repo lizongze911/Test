@@ -38,5 +38,9 @@
         WHERE 
        		user_id = #{id}
     </update>
-    
+    <delete id="delete" parameterType="demo1.User">
+    	Delete
+    	from t_user
+    	where user_id=#{id} and user_code=#{usercode} and user_name=#{username}
+    </delete>
 </mapper>

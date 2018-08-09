@@ -14,7 +14,8 @@ public class MyBatisConfiguration {
         properties.setProperty("offsetAsPageNum","true");
         properties.setProperty("rowBoundsWithCount","true");
         properties.setProperty("reasonable","true");
-        properties.setProperty("dialect","oracle");    //properties.setProperty("dialect","mysql");
+        //properties.setProperty("dialect","oracle");    //properties.setProperty("dialect","mysql");
+        properties.setProperty("dialect","mysql");
         pageHelper.setProperties(properties);
         return pageHelper;
    } 

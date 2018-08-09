@@ -1,7 +1,6 @@
 package demo1;
 
 
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -9,12 +8,10 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+
 import com.github.pagehelper.PageHelper;
 
 import demo1.User;
@@ -73,6 +70,7 @@ public class HelloService{
 	public void  update() {
 		userMapper.update(new User(1,"duwenyi1","wucuihua2"));
 	}
-	
-    
+	public void delete(int id,String name,String code) {
+		userMapper.delete(new User(id,name,code));
+	}
 }
