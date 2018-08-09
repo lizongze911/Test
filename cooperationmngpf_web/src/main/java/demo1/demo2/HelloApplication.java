@@ -223,7 +223,7 @@ public class HelloApplication{
 	        conn.set("hello".getBytes(), "world".getBytes());
 	        System.out.println(new String(conn.get("hello".getBytes())));
 	    }*/
-	 @RequestMapping(value="/uploadForm",method=RequestMethod.POST)
+	 @RequestMapping("/uploadForm")
 	 @ResponseBody
 	 public String uploadFile(@RequestParam("pic")CommonsMultipartFile pic,HttpServletRequest req,HttpServletResponse response,String modelName) throws IOException{
 		return null;

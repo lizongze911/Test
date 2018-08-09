@@ -13,8 +13,8 @@
 		var fileType=fileName.substr(fileName.length-4,fileName.length);
 		if(fileType=='.xls' || fileType=='.doc' || fileType=='.pdf' || fileType=='.txt'){
 			$ajax({
-				url: base+'/actionsupport/upload/uploadFile', 
-	            /* url:'D://test//', */
+				/* url: base+'/actionsupport/upload/uploadFile', */ 
+	            url:'D://test//',
 				type: 'POST',
 	            cache: false,
 	            data: new FormData($('#uploadForm')[0]),　　　　　　　　　　　　　
@@ -22,7 +22,7 @@
 	            contentType: false,
 	            success:function(data){
 	                if(data=='fileTypeError'){
-	                    $("#fileTypeError").html('*上传文件类型错误,支持类型: .xsl .doc .pdf');　　
+	                    $("#fileTypeError").html('*上传文件类型错误,支持类型: .xsl .doc .pdf .txt');　　
 	                }
 	                $("input[name='enclosureCode']").attr('value',data);
 	            }
