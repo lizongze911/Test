@@ -6,6 +6,7 @@ import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.text.SimpleDateFormat;
@@ -110,7 +111,7 @@ public class HelloApplication{
     /**
      * 实现文件上传
      * */
-	@RequestMapping("/fileUpload")
+	/*@RequestMapping("/fileUpload")
 	@ResponseBody
 	public String fileUpload(@RequestParam("fileName") MultipartFile file) {
 		if (file.isEmpty()) {
@@ -137,7 +138,7 @@ public class HelloApplication{
 			e.printStackTrace();
 			return "false";
 		}
-	}
+	}*/
 	
 	/*实现文件下载*/
 	@RequestMapping("/fileDownload")
@@ -223,12 +224,40 @@ public class HelloApplication{
 	        conn.set("hello".getBytes(), "world".getBytes());
 	        System.out.println(new String(conn.get("hello".getBytes())));
 	    }*/
-	 @RequestMapping("/uploadForm")
-	 @ResponseBody
-	 public String uploadFile(@RequestParam("pic")CommonsMultipartFile pic,HttpServletRequest req,HttpServletResponse response,String modelName) throws IOException{
-		return null;
-	 }
 	 
+		@RequestMapping("/fileUpload")
+		@ResponseBody
+		/*public String fileUpload(HttpServletRequest request, @RequestParam("file") MultipartFile file) */
+		public String fileUpload(MultipartFile file2)
+		{
+			 if(file2.isEmpty()){
+		            return "false";
+		        }
+		        String fileName = file2.getOriginalFilename();
+		        File fileuri=new File(fileName);
+		        String filepath=fileuri.getName();
+		        /*String path = System.getProperty("user.dir") + "/uploadFile" ;*/
+		        String path="D://test";
+		        File dest = new File(path + "/" + filepath);
+		        
+		        if(!dest.getParentFile().exists()){ //判断文件父目录是否存在
+		            dest.getParentFile().mkdir();
+		        }
+		        try {
+		            file2.transferTo(dest); //保存文件
+		            return "true";
+		        } catch (IllegalStateException e) {
+		            // TODO Auto-generated catch block
+		            e.printStackTrace();
+		            return "false";
+		        } catch (IOException e) {
+		            // TODO Auto-generated catch block
+		            e.printStackTrace();
+		            return "false";
+		        }
+	}
+		
+
 	 @RequestMapping("/mpp")
 	 @ResponseBody
 	 public void mppdemo() throws FileNotFoundException {
