@@ -228,12 +228,12 @@ public class HelloApplication{
 		@RequestMapping("/fileUpload")
 		@ResponseBody
 		/*public String fileUpload(HttpServletRequest request, @RequestParam("file") MultipartFile file) */
-		public String fileUpload(MultipartFile file2)
+		public String fileUpload(MultipartFile file)
 		{
-			 if(file2.isEmpty()){
+			 if(file.isEmpty()){
 		            return "false";
 		        }
-		        String fileName = file2.getOriginalFilename();
+		        String fileName = file.getOriginalFilename();
 		        File fileuri=new File(fileName);
 		        String filepath=fileuri.getName();
 		        /*String path = System.getProperty("user.dir") + "/uploadFile" ;*/
@@ -244,7 +244,7 @@ public class HelloApplication{
 		            dest.getParentFile().mkdir();
 		        }
 		        try {
-		            file2.transferTo(dest); //保存文件
+		            file.transferTo(dest); //保存文件
 		            return "true";
 		        } catch (IllegalStateException e) {
 		            // TODO Auto-generated catch block

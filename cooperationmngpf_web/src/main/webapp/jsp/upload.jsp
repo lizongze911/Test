@@ -15,24 +15,23 @@
 		<button id="upload" type="button" onclick="doUpload()">upload</button>
 	<script type="text/javascript"> 
 	
-		/* $(function() {
-			$("#upload").click(function() */ 
 				
 		function doUpload() {
-			var fileObj = document.getElementById("file").files[0];
+			/* var fileObj = document.getElementById("file").files[0];
 			var formData = new FormData();
-			//formData.append("file", fileObj);
-			var tt={"file2":fileObj};
+			formData.append("file", fileObj); */
+			var formData=new FormData();
+			formData.append("file", $('#file')[0].files[0])
 			$.ajax({
-				url : 'http://localhost:8080/fileUpload',
+				url : "/fileUpload",
 				type : 'POST',
 				cache : false,
-				//data : formData,
-				data:tt,
+				data : formData,
 				processData : false,
-				contentType : false
+				contentType : false,
+				saync:false
 			}).done(function(res) {
-				alert(res);
+				alert("上传成功");
 			}).fail(function(res) {
 				alert("上传失败");
 			});
