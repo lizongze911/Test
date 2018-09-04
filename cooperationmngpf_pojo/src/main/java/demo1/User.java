@@ -1,6 +1,11 @@
 package demo1;
 
-public class User{
+import java.io.Serializable;
+
+import org.springframework.web.multipart.MultipartFile;
+
+//实现序列化接口
+public class User implements Serializable{
 
 	private long id;
 	// 用户名称
@@ -11,6 +16,9 @@ public class User{
 	private String passwd = null;
 	// 用户单位
 	private String userunit = null;
+	//用户文件
+	private MultipartFile file=null;
+
 	public long getId() {
 		return id;
 	}
@@ -41,7 +49,13 @@ public class User{
 	public void setUserunit(String userunit) {
 		this.userunit = userunit;
 	}
-
+	
+	public MultipartFile getImage() {
+		return file;
+	}
+	public void setImage(MultipartFile file) {
+		this.file = file;
+	}
 
 	public User(){
 	   
