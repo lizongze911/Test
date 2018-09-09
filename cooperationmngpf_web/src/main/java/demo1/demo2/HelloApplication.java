@@ -8,10 +8,12 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.io.RandomAccessFile;
 import java.io.Reader;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -54,7 +56,7 @@ import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 
 import com.github.pagehelper.PageHelper;
 import com.mysql.fabric.xmlrpc.base.Data;
-import com.sun.tools.internal.xjc.reader.xmlschema.bindinfo.BIConversion.Static;
+/*import com.sun.tools.internal.xjc.reader.xmlschema.bindinfo.BIConversion.Static;*/
 
 import demo1.HelloService;
 import demo1.MppUtil;
@@ -500,10 +502,41 @@ public class HelloApplication {
 			}
 		}
 	}
-
+	@RequestMapping("/fileWrite")
+	@ResponseBody
+	public void writefile1(@RequestParam("file2") MultipartFile file,String content) throws IOException{
+		String filepath = fullfilename(file);
+		content = "test";
+		try {
+			// 打开一个随机访问文件流，按读写方式
+			RandomAccessFile randomFile = new RandomAccessFile(filepath, "rw");
+			// 文件长度，字节数
+			long fileLength = randomFile.length();
+			// 将写文件指针移到文件尾。
+			randomFile.seek(fileLength);
+			randomFile.writeBytes(content);
+			randomFile.close();
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		}
+	}
+	@RequestMapping("/fileWrite2")
+	@ResponseBody
+	public void writefile2(@RequestParam("file2") MultipartFile file,String content) throws IOException{
+		String filepath = fullfilename(file);
+		content = "test";
+		 try {  
+	            //打开一个写文件器，构造函数中的第二个参数true表示以追加形式写文件  
+	            FileWriter writer = new FileWriter(filepath, true);  
+	            writer.write(content);  
+	            writer.close();  
+	        } catch (IOException e) {  
+	            e.printStackTrace();  
+	        }  
+	}
 	@RequestMapping("/mpp")
 	@ResponseBody
-
 	public void mppdemo() throws FileNotFoundException {
 		// TODO Auto-generated method stub
 		List<SchProjectTask> taskBeanList = MppUtil.getTaskList("D:/CEBIM使用.mpp");

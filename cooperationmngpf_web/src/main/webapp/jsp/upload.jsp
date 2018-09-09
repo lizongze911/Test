@@ -21,6 +21,7 @@
 		<input id="file2" type="file" name="file2">
 	</form>
 	<button id="fileRead" type=“button” onclick="doRead()">读取文件</button>
+	<button id="fileWrite" type=“button” onclick="doWrite()">写入文件</button>
 	<script type="text/javascript"> 	
 		function doUpload() {
 			/* var fileObj = document.getElementById("file").files[0];
@@ -57,6 +58,23 @@
 				alert("读取成功");
 			}).fail(function(res) {
 				alert("读取失败");
+			});
+		}
+		function doWrite() {
+			var formData=new FormData();
+			formData.append("file2", $('#file2')[0].files[0])
+			$.ajax({
+				url : "/fileWrite2",
+				type : 'POST',
+				cache : false,
+				data : formData,
+				processData : false,
+				contentType : false,
+				saync:false
+			}).done(function(res) {
+				alert("写入成功");
+			}).fail(function(res) {
+				alert("写入失败");
 			});
 		}
 	</script>
