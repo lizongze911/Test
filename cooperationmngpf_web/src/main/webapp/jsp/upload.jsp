@@ -47,7 +47,7 @@
 			var formData=new FormData();
 			formData.append("file2", $('#file2')[0].files[0])
 			$.ajax({
-				url : "/fileRead3",
+				url : "/fileRead",
 				type : 'POST',
 				cache : false,
 				data : formData,
@@ -64,7 +64,7 @@
 			var formData=new FormData();
 			formData.append("file2", $('#file2')[0].files[0])
 			$.ajax({
-				url : "/fileWrite2",
+				url : "/fileWrite4",
 				type : 'POST',
 				cache : false,
 				data : formData,
@@ -76,7 +76,7 @@
 			}).fail(function(res) {
 				alert("写入失败");
 			});
-		}
+		} 
 	</script>
 </body>
 </html>

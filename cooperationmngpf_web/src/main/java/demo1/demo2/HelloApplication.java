@@ -3,6 +3,7 @@ package demo1.demo2;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -58,6 +59,7 @@ import com.github.pagehelper.PageHelper;
 import com.mysql.fabric.xmlrpc.base.Data;
 /*import com.sun.tools.internal.xjc.reader.xmlschema.bindinfo.BIConversion.Static;*/
 
+import demo1.FileIOUtil;
 import demo1.HelloService;
 import demo1.MppUtil;
 import demo1.SchProjectTask;
@@ -343,35 +345,17 @@ public class HelloApplication {
 	}
 
 	/**
-	 * 读取原型
-	 */
-	public void ReadMethod() {
-		String filename="D://1.txt";
-		String line="";
-		try {
-			BufferedReader in=new BufferedReader(new FileReader(filename));
-			line=in.readLine();
-			while(line!=null) {
-				System.out.println(line);
-				line=in.readLine();
-			}
-			in.close();
-		}catch (IOException e) {
-			// TODO: handle exception
-			e.printStackTrace();
-		}
-	}
-	/**
 	 * 实现文件读取
 	 * @param file
 	 * @throws IOException
 	 */
 	@RequestMapping("/fileRead")
 	@ResponseBody
-	public void readfileByBytes(@RequestParam("file2") MultipartFile file)throws IOException {
-		String filepath = fullfilename(file);
+	public void readfileByBytes(@RequestParam("file2") MultipartFile file,HttpServletRequest request)throws IOException {			
+		String filepath = getBrowserFilepath(file, request);		
 		InputStream in = null;
 		try {
+			System.out.println(filepath);
 			System.out.println("以字节为单位读取文件内容，一次读一个字节：");
 			// 一次读一个字节
 			in = new FileInputStream(filepath);
@@ -385,7 +369,7 @@ public class HelloApplication {
 			return;
 		}
 		try {
-			System.out.println("");
+			System.out.println(filepath);
 			System.out.println("以字节为单位读取文件内容，一次读多个字节：");  
             // 一次读多个字节  
             byte[] tempbytes = new byte[100];  
@@ -408,21 +392,36 @@ public class HelloApplication {
             }  
         }  
 	}
-
-	private String fullfilename(MultipartFile file) {
-		if (file.isEmpty()) {
-			return null;
-		} else {
-			String filename = file.getOriginalFilename();
-			File fileuri = new File(filename);
-			String filepath = fileuri.getAbsolutePath();
-			return filepath;
+	/**
+	 * 获取不同浏览器文件的地址
+	 * @param file
+	 * @param request
+	 * @return
+	 * @throws IOException
+	 */
+	public String getBrowserFilepath(MultipartFile file, HttpServletRequest request) throws IOException {
+		String agent = request.getHeader("User-Agent").toLowerCase();
+		String brotype = FileIOUtil.getBrowserName(agent);//获取浏览器类型
+		String filename = file.getOriginalFilename();
+		File fileuri = new File(filename);
+		String filepath;
+		//非ie浏览器，文件上传到服务器
+		if (!brotype.contains("ie")) {
+			filepath = fileuri.getName();
+			String hostpath = request.getServletContext().getRealPath("/");//获取项目所在服务器的全路径
+			File dest = new File(hostpath + filepath);
+			file.transferTo(dest);//文件上传到服务器
+			filepath = dest.getAbsolutePath();
+		}else {
+			filepath=fileuri.getAbsolutePath();
 		}
+		return filepath;
 	}
+	
 	@RequestMapping("/fileRead2")
 	@ResponseBody
-	public void readfileByChars (@RequestParam("file2") MultipartFile file)throws IOException{
-		String filepath = fullfilename(file);
+	public void readfileByChars (@RequestParam("file2") MultipartFile file, HttpServletRequest request)throws IOException{
+		String filepath = getBrowserFilepath(file, request);		
 		Reader reader= null;
 		try {
 			System.out.println("以字符为单位读取文件内容，一次读一个字节：");  
@@ -476,8 +475,8 @@ public class HelloApplication {
 	}
 	@RequestMapping("/fileRead3")
 	@ResponseBody
-	public void readfileByLines(@RequestParam("file2") MultipartFile file) throws IOException {
-		String filepath = fullfilename(file);
+	public void readfileByLines(@RequestParam("file2") MultipartFile file,HttpServletRequest request) throws IOException {
+		String filepath = getBrowserFilepath(file, request);	
 		BufferedReader reader = null;
 		try {
 			System.out.println("以行为单位读取文件内容，一次读一整行：");
@@ -504,9 +503,9 @@ public class HelloApplication {
 	}
 	@RequestMapping("/fileWrite")
 	@ResponseBody
-	public void writefile1(@RequestParam("file2") MultipartFile file,String content) throws IOException{
-		String filepath = fullfilename(file);
-		content = "test";
+	public void writefile1(@RequestParam("file2") MultipartFile file,String content,HttpServletRequest request) throws IOException{
+		String filepath = getBrowserFilepath(file, request);	
+		content = "test\r\n";
 		try {
 			// 打开一个随机访问文件流，按读写方式
 			RandomAccessFile randomFile = new RandomAccessFile(filepath, "rw");
@@ -523,17 +522,59 @@ public class HelloApplication {
 	}
 	@RequestMapping("/fileWrite2")
 	@ResponseBody
-	public void writefile2(@RequestParam("file2") MultipartFile file,String content) throws IOException{
-		String filepath = fullfilename(file);
-		content = "test";
+	public void writefile2(@RequestParam("file2") MultipartFile file,String content,HttpServletRequest request) throws IOException{
+		String filepath = getBrowserFilepath(file, request);	
+		content = "test\r\n";
 		 try {  
 	            //打开一个写文件器，构造函数中的第二个参数true表示以追加形式写文件  
 	            FileWriter writer = new FileWriter(filepath, true);  
+	            //filewrite写入文件
 	            writer.write(content);  
 	            writer.close();  
-	        } catch (IOException e) {  
+	        } catch (Exception e) {  
 	            e.printStackTrace();  
 	        }  
+	}
+	@RequestMapping("/fileWrite3")
+	@ResponseBody
+	public void writefile3(@RequestParam("file2") MultipartFile file,String content,HttpServletRequest request) throws IOException{
+		String filepath = getBrowserFilepath(file, request);	
+		content = "test\r\n";
+		 try {   
+	            FileWriter writer = new FileWriter(filepath,true);  
+	            //bufferedwriter写入文件
+	            BufferedWriter bwriter=new BufferedWriter(writer);
+	            bwriter.write(content);
+	            bwriter.close();
+	        } catch (Exception e) {  
+	            e.printStackTrace();  
+	        }  
+	}
+	@RequestMapping("/fileWrite4")
+	@ResponseBody
+	public void writefile4(@RequestParam("file2") MultipartFile file,String content,HttpServletRequest request) throws IOException{
+		String filepath = getBrowserFilepath(file, request);	
+		System.out.println(filepath);
+		content = "test\r\n";
+		FileOutputStream fop=null;
+		 try {   
+	            fop=new FileOutputStream(filepath,true);
+	            byte[] contentInBytes=content.getBytes();
+	            fop.write(contentInBytes);
+	            fop.flush();
+	            fop.close();
+	        } catch (Exception e) {  
+	            e.printStackTrace();  
+	        }  finally {
+				try {
+					if(fop!=null) {
+						fop.close();
+					}
+				}catch (IOException e) {
+					// TODO: handle exception
+					e.printStackTrace();
+				}
+			}
 	}
 	@RequestMapping("/mpp")
 	@ResponseBody
