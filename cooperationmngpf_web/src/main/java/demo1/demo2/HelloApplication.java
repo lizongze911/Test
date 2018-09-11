@@ -14,6 +14,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.io.PrintWriter;
 import java.io.RandomAccessFile;
 import java.io.Reader;
 import java.text.SimpleDateFormat;
@@ -170,11 +171,11 @@ public class HelloApplication {
 		String fileName = file.getOriginalFilename();//获得上传文件原名
 		File fileuri = new File(fileName);
 		String filepath = fileuri.getName();//从file中获取文件组件的名字
-		String filename=filepath.substring(0, filepath.lastIndexOf("."));
-		String suffix=filepath.substring(filepath.lastIndexOf(".") + 1);
+		/*String filename=filepath.substring(0, filepath.lastIndexOf("."));
+		String suffix=filepath.substring(filepath.lastIndexOf(".") + 1);*/
 		String path = "D://test";
 		
-		Calendar Cld = Calendar.getInstance();
+		/*Calendar Cld = Calendar.getInstance();
 		int YY = Cld.get(Calendar.YEAR) ;//年
 		int MM = Cld.get(Calendar.MONTH)+1;//月
 		int DD = Cld.get(Calendar.DATE);//日
@@ -182,10 +183,10 @@ public class HelloApplication {
 		int mm = Cld.get(Calendar.MINUTE);//分
 		int SS = Cld.get(Calendar.SECOND);//秒
 		int MI = Cld.get(Calendar.MILLISECOND);//毫秒
-		String time=new SimpleDateFormat("yyyyMMddHHmmssSSS").format(new Date());
+		String time=new SimpleDateFormat("yyyyMMddHHmmssSSS").format(new Date());*/
 		
 		/*File dest = new File(path + "/" + filename+"_"+time+"."+suffix);*/
-		File dest = new File(path+"/"+fileName);
+		File dest = new File(path+"/"+filepath);
 		if (!dest.getParentFile().exists()) { // 判断文件父目录是否存在
 			dest.getParentFile().mkdir();
 		}
@@ -335,7 +336,9 @@ public class HelloApplication {
 					outputStream.flush();
 					/* 第九步：关闭输出流 */
 					outputStream.close();
-				}
+				}else {		
+					request.setAttribute("message", "此文件不存在，请确认后再输入！");
+				}			
 			} catch (Exception e) {
 				// TODO: handle exception
 				return "false";
@@ -343,7 +346,61 @@ public class HelloApplication {
 		}
 		return null;
 	}
-
+	@RequestMapping("/fileDownload3")
+	@ResponseBody
+	public String downloadFile3(@RequestParam("file") MultipartFile file,HttpServletRequest request,HttpServletResponse response)throws IOException{
+		String fileoriname = file.getOriginalFilename();
+		File fileuri = new File(fileoriname);
+		String filepath = fileuri.getName();
+		if(filepath!=null) {
+			//设置文件路径
+		    String realPath = "D://test//";
+		    /* 第一步:根据文件路径获取文件 */
+		    File downfile = new File(realPath , filepath);
+		    try {
+				if (downfile.exists()) {
+					/* 第二步：根据已存在的文件，创建文件输入流 */
+					InputStream inputStream = new BufferedInputStream(new FileInputStream(downfile));
+					/* 第三步：创建缓冲区，大小为流的最大字符数 */
+					byte[] buffer = new byte[inputStream.available()]; // int available() 返回值为流中尚未读取的字节的数量
+					/* 第四步：从文件输入流读字节流到缓冲区 */
+					inputStream.read(buffer);
+					/* 第五步： 关闭输入流 */
+					inputStream.close();
+					String filename = downfile.getName();// 获取文件名
+					/*把文件名按UTF-8取出并按ISO8859-1编码，保证弹出窗口中的文件名中文不乱码，
+					 * 中文不要太多，最多支持17个中文，因为header有150个字节限制
+					 * */
+					filename=new String(filename.getBytes("utf-8"), "iso8859-1");
+					response.reset();
+					response.setContentType("application/x-director");// 设置强制下载不打开
+					/*Content-Disposition中指定的类型是文件的扩展名，
+					 * 并且弹出的下载对话框中的文件类型图片是按照文件的扩展名显示的，
+					 * 点保存后，文件以filename的值命名，保存类型以Content中设置的为准。
+					 * 注意：在设置Content-Disposition头字段之前，一定要设置Content-Type头字段。  
+					 */
+					response.addHeader("Content-Disposition",
+							"attachment;filename=" + filename);
+					response.addHeader("Content-Length", "" + downfile.length());
+					/* 第六步：创建文件输出流 */
+					OutputStream outputStream = new BufferedOutputStream(response.getOutputStream());
+					/* 第七步：把缓冲区的内容写入文件输出流 */
+					outputStream.write(buffer);
+					/* 第八步：刷空输出流，并输出所有被缓存的字节 */
+					outputStream.flush();
+					/* 第九步：关闭输出流 */
+					outputStream.close();
+				}else {		
+					request.setAttribute("message", "此文件不存在，请确认后再输入！");
+				}
+		    }catch (Exception e) {
+				// TODO: handle exception
+		    	e.printStackTrace();
+		    	return "false";
+			}
+		}
+		return null;
+	}
 	/**
 	 * 实现文件读取
 	 * @param file
@@ -555,7 +612,7 @@ public class HelloApplication {
 	public void writefile4(@RequestParam("file2") MultipartFile file,String content,HttpServletRequest request) throws IOException{
 		String filepath = getBrowserFilepath(file, request);	
 		System.out.println(filepath);
-		content = "test\r\n";
+		/*content = "test\r\n";*/
 		FileOutputStream fop=null;
 		 try {   
 	            fop=new FileOutputStream(filepath,true);
@@ -586,5 +643,24 @@ public class HelloApplication {
 			System.out.println(task);
 		}
 	}
+	
+/*	@RequestMapping("/fileShow")
+	@ResponseBody
+	public void ShowFile(HttpServletRequest request,HttpServletResponse response) throws IOException{
 
+		// 读取本地文本输入流
+		FileInputStream inputStream = new FileInputStream("d:/1.txt");
+		int i = inputStream.available();
+		// byte数组用于存放字节数据
+		byte[] buff = new byte[i];
+		inputStream.read(buff);
+		// 记得关闭输入流
+		inputStream.close();
+		// 设置发送到客户端的响应内容类型
+		response.setContentType("text/html;charset=utf-8");
+		OutputStream out = response.getOutputStream();
+		out.write(buff);
+		// 关闭响应输出流
+		out.close();
+	}*/
 }

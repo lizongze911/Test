@@ -18,6 +18,7 @@
 		</p>
 	</form>
 	<a href="<%=request.getContextPath()%>/fileDownload">下载</a>
+	
 	</form>
 	<script type="text/javascript"> 	
     		function doUpload() {

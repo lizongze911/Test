@@ -1,12 +1,12 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-<!--ddd -->
+	<!--ddd -->
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>cooperationmngpf</groupId>
 	<artifactId>cooperationmngpf_web</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>war</packaging>
-
 
 	<parent>
 		<groupId>org.springframework.boot</groupId>
@@ -26,36 +26,25 @@
 			<artifactId>bonecp-spring</artifactId>
 			<version>0.8.0.RELEASE</version>
 		</dependency>
-
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
-
 		<dependency>
 			<groupId>org.apache.tomcat.embed</groupId>
 			<artifactId>tomcat-embed-jasper</artifactId>
 			<scope>provided</scope>
 		</dependency>
-
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-tomcat</artifactId>
 			<scope>provided</scope>
 		</dependency>
-
-
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-legacy</artifactId>
 			<version>1.1.0.RELEASE</version>
 		</dependency>
-
-<!-- 		<dependency>
-			<groupId>cooperationmngpf</groupId>
-			<artifactId>cooperationmngpf_service</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
-		</dependency> -->
 
 		<!-- Mybatis -->
 		<dependency>
@@ -68,8 +57,6 @@
 			<artifactId>mybatis-spring</artifactId>
 			<version>1.3.1</version>
 		</dependency>
-
-
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-jdbc</artifactId>
@@ -81,21 +68,18 @@
 			<version>1.1.1</version>
 		</dependency>
 
-<dependency>
-    <groupId>org.apache.directory.studio</groupId>
-    <artifactId>org.apache.commons.io</artifactId>
-    <version>2.4</version>
-</dependency>
-
-
-
-	  	  <!-- 分页插件 -->
 		<dependency>
-		   <groupId>com.github.pagehelper</groupId>
-		   <artifactId>pagehelper</artifactId>
-		   <version>4.1.0</version>  <!--我这里用版本4.1.0-->
+			<groupId>org.apache.directory.studio</groupId>
+			<artifactId>org.apache.commons.io</artifactId>
+			<version>2.4</version>
 		</dependency>
-	
+
+		<!-- 分页插件 -->
+		<dependency>
+			<groupId>com.github.pagehelper</groupId>
+			<artifactId>pagehelper</artifactId>
+			<version>4.1.0</version>  <!--我这里用版本4.1.0 -->
+		</dependency>
 
 		<dependency>
 			<groupId>junit</groupId>
@@ -116,30 +100,48 @@
 			<optional>true</optional>
 			<scope>true</scope>
 		</dependency>
-		
-		<!--  cache -->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-cache</artifactId>
-        </dependency>
-        <!--  redis -->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-data-redis</artifactId>
-        </dependency>
-		
-  		<dependency>
-			  <groupId>cooperationmngpf</groupId>
-			  <artifactId>cooperationmngpf_pojo</artifactId>
-			  <version>0.0.1-SNAPSHOT</version>
-	    </dependency>
-	    
-  		<dependency>
-			  <groupId>cooperationmngpf</groupId>
-			  <artifactId>cooperationmngpf_service</artifactId>
-			  <version>0.0.1-SNAPSHOT</version>
-	    </dependency>
-	    
+
+		<!-- cache -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-cache</artifactId>
+		</dependency>
+		<!-- redis -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-data-redis</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-jms</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-context-support</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>cooperationmngpf</groupId>
+			<artifactId>cooperationmngpf_pojo</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
+
+		<dependency>
+			<groupId>cooperationmngpf</groupId>
+			<artifactId>cooperationmngpf_service</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
+		<!-- ActiveMQ -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-activemq</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-test</artifactId>
+			<scope>test</scope>
+		</dependency>
 	</dependencies>
 	<build>
 		<finalName>${project.artifactId}</finalName>
@@ -193,10 +195,8 @@
 	</build>
 
 	<properties>
-    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-      <java.version>1.7</java.version>
-  </properties>
-
-
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<java.version>1.7</java.version>
+	</properties>
 
 </project>
